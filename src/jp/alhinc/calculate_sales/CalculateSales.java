@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CalculateSales {
@@ -31,14 +33,67 @@ public class CalculateSales {
 		// 支店コードと売上金額を保持するMap
 		Map<String, Long> branchSales = new HashMap<>();
 
+
+
 		// 支店定義ファイル読み込み処理
 		if(!readFile(args[0], FILE_NAME_BRANCH_LST, branchNames, branchSales)) {
 			return;
 		}
 
 		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
+		File[] files = new File("C:\\Users\\trainee1336\\Desktop\\売上集計課題").listFiles();
+
+		//先にファイルの情報を格納するListを宣言する
+		List<File> rcdFiles = new ArrayList<>();
+
+		//getNameで売上集計課題フォルダ内のファイル名を取得する
+		for(int i = 0; i < files.length; i++) {
+			String fileName = files[i].getName();
+			if(fileName.matches("^[0-9]{8}.rcd$")) {
+				rcdFiles.add(files[i]);
+			}
+		}
+        //rcdFilesに複数の売り上げファイル情報を格納してるため、その数だけ繰り返す
+		for(int i = 0; i < rcdFiles.size(); i++) {
+			BufferedReader br = null;
+
+			try {
+				File file = new File("C:\\Users\\trainee1336\\Desktop\\売上集計課題", rcdFiles.get(i).getName());
+				FileReader fr = new FileReader(file);
+				br = new BufferedReader(fr);
+
+				String  line;
+				//リストの宣言
+				List<String> fileDate = new ArrayList<String>();
+
+				//while文｛リストにadd｝
+				while((line = br.readLine()) != null) {
+					fileDate.add(line);
+				}
+
+				//型変換
+				long filesale = Long.parseLong(fileDate.get(1));
+
+				//mapに追加
 
 
+
+			} catch(IOException e) {
+				System.out.println(UNKNOWN_ERROR);
+				return;
+			} finally {
+				// ファイルを開いている場合
+				if(br != null) {
+					try {
+						// ファイルを閉じる
+						br.close();
+					} catch(IOException e) {
+						System.out.println(UNKNOWN_ERROR);
+						return;
+					}
+				}
+			}
+		}
 
 		// 支店別集計ファイル書き込み処理
 		if(!writeFile(args[0], FILE_NAME_BRANCH_OUT, branchNames, branchSales)) {
@@ -68,6 +123,11 @@ public class CalculateSales {
 			// 一行ずつ読み込む
 			while((line = br.readLine()) != null) {
 				// ※ここの読み込み処理を変更してください。(処理内容1-2)
+				String[] item = line.split(",");
+				//Mapに支店コードと支店名を保持
+				 branchNames.put(item[0], item[1]);
+				 //Mapに支店コードと売り上げを保持
+				 branchSales.put(item[0], 0L);
 				System.out.println(line);
 			}
 
