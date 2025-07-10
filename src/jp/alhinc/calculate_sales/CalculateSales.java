@@ -43,7 +43,7 @@ public class CalculateSales {
 		}
 
 		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
-		File[] files = new File("C:\\Users\\trainee1336\\Desktop\\売上集計課題").listFiles();
+		File[] files = new File(args[0]).listFiles();
 
 		//先にファイルの情報を格納するListを宣言する
 		List<File> rcdFiles = new ArrayList<>();
@@ -51,7 +51,7 @@ public class CalculateSales {
 		//getNameで売上集計課題フォルダ内のファイル名を取得する
 		for(int i = 0; i < files.length; i++) {
 			String fileName = files[i].getName();
-			if(fileName.matches("^[0-9]{8}.rcd$")) {
+			if(fileName.matches("^[0-9]{8}[.]rcd$")) {
 				rcdFiles.add(files[i]);
 			}
 		}
@@ -60,27 +60,26 @@ public class CalculateSales {
 			BufferedReader br = null;
 
 			try {
-				File file = new File("C:\\Users\\trainee1336\\Desktop\\売上集計課題", rcdFiles.get(i).getName());
+				File file = new File(args[0], rcdFiles.get(i).getName());
 				FileReader fr = new FileReader(file);
 				br = new BufferedReader(fr);
 
 				String  line;
 				//リストの宣言
-				List<String> fileDate = new ArrayList<String>();
+				List<String> fileData = new ArrayList<String>();
 
 				//while文｛リストにadd｝
 				while((line = br.readLine()) != null) {
-					fileDate.add(line);
+					fileData.add(line);
 				}
 
 				//型変換
-				long fileSale = Long.parseLong(fileDate.get(1));
+				long fileSale = Long.parseLong(fileData.get(1));
 
 				//読み込んだ売り上げ金額を加算
-                long saleAmount = branchSales.get(fileDate.get(0)) + fileSale ;
-                // branchSales.get(fileDate.get(0))→branchSales.get("003")
+                long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
                 //Mapに追加
-               branchSales.put(fileDate.get(0), saleAmount);
+                branchSales.put(fileData.get(0), saleAmount);
 
 			} catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
@@ -132,7 +131,6 @@ public class CalculateSales {
 				 branchNames.put(item[0], item[1]);
 				 //Mapに支店コードと売り上げを保持
 				 branchSales.put(item[0], 0L);
-				System.out.println(line);
 			}
 
 		} catch(IOException e) {
