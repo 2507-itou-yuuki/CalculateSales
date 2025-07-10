@@ -76,7 +76,7 @@ public class CalculateSales {
 
 				//読み込んだ売り上げ金額を加算
 				long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
-                //Mapに追加
+				//Mapに追加
 				branchSales.put(fileData.get(0), saleAmount);
 
 			} catch(IOException e) {
