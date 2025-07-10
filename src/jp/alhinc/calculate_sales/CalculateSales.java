@@ -75,9 +75,9 @@ public class CalculateSales {
 				long fileSale = Long.parseLong(fileData.get(1));
 
 				//読み込んだ売り上げ金額を加算
-                long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
+				long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
                 //Mapに追加
-                branchSales.put(fileData.get(0), saleAmount);
+				branchSales.put(fileData.get(0), saleAmount);
 
 			} catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
