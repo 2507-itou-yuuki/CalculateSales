@@ -35,8 +35,6 @@ public class CalculateSales {
 		// 支店コードと売上金額を保持するMap
 		Map<String, Long> branchSales = new HashMap<>();
 
-
-
 		// 支店定義ファイル読み込み処理
 		if(!readFile(args[0], FILE_NAME_BRANCH_LST, branchNames, branchSales)) {
 			return;
@@ -55,7 +53,7 @@ public class CalculateSales {
 				rcdFiles.add(files[i]);
 			}
 		}
-        //rcdFilesに複数の売り上げファイル情報を格納してるため、その数だけ繰り返す
+			//rcdFilesに複数の売り上げファイル情報を格納してるため、その数だけ繰り返す
 		for(int i = 0; i < rcdFiles.size(); i++) {
 			BufferedReader br = null;
 
@@ -128,9 +126,9 @@ public class CalculateSales {
 				// ※ここの読み込み処理を変更してください。(処理内容1-2)
 				String[] item = line.split(",");
 				//Mapに支店コードと支店名を保持
-				 branchNames.put(item[0], item[1]);
-				 //Mapに支店コードと売り上げを保持
-				 branchSales.put(item[0], 0L);
+				branchNames.put(item[0], item[1]);
+				//Mapに支店コードと売り上げを保持
+				branchSales.put(item[0], 0L);
 			}
 
 		} catch(IOException e) {
@@ -171,7 +169,7 @@ public class CalculateSales {
 
 			for(String key : branchNames.keySet()) {
 				bw.write(key + "," + branchNames.get(key) + "," + branchSales.get(key));
-				bw.newLine(); 
+				bw.newLine();
 			}
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
