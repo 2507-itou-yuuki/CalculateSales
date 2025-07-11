@@ -23,6 +23,7 @@ public class CalculateSales {
 	private static final String UNKNOWN_ERROR = "予期せぬエラーが発生しました";
 	private static final String FILE_NOT_EXIST = "支店定義ファイルが存在しません";
 	private static final String FILE_INVALID_FORMAT = "支店定義ファイルのフォーマットが不正です";
+	private static final String FILE_NAME_SERIALNUMBER = "売上ファイル名が連番になっていません";
 
 	/**
 	 * メインメソッド
@@ -53,6 +54,19 @@ public class CalculateSales {
 				rcdFiles.add(files[i]);
 			}
 		}
+
+		for(int i = 0; i < rcdFiles.size() -1; i++) {
+			//比較する2つのファイル名の先頭から8文字切り出しint型に変換
+			int former = Integer.parseInt(rcdFiles.get(i).getName().substring(0, 8));
+			int latter = Integer.parseInt(rcdFiles.get(i+1).getName().substring(0, 8));
+			//2つのファイル名の数字の比較して、差が1ではなかったらエラーメッセージを表示
+			if((former - latter) != 1) {
+				System.out.println(FILE_NAME_SERIALNUMBER);
+				return;
+			}
+		}
+
+
 			//rcdFilesに複数の売り上げファイル情報を格納してるため、その数だけ繰り返す
 		for(int i = 0; i < rcdFiles.size(); i++) {
 			BufferedReader br = null;
@@ -76,6 +90,7 @@ public class CalculateSales {
 
 				//読み込んだ売り上げ金額を加算
 				long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
+
 				//Mapに追加
 				branchSales.put(fileData.get(0), saleAmount);
 
@@ -117,6 +132,10 @@ public class CalculateSales {
 
 		try {
 			File file = new File(path, fileName);
+			if(!file.exists()) {
+				System.out.println(FILE_NOT_EXIST);
+				return false;
+			}
 			FileReader fr = new FileReader(file);
 			br = new BufferedReader(fr);
 
@@ -125,6 +144,11 @@ public class CalculateSales {
 			while((line = br.readLine()) != null) {
 				// ※ここの読み込み処理を変更してください。(処理内容1-2)
 				String[] item = line.split(",");
+				//支店定義ファイルのフォーマットが正しいかどうか
+				if((item.length != 2) || (!item[0].matches("^[0-9]{3}"))) {
+					System.out.println(FILE_INVALID_FORMAT);
+					return false;
+				}
 				//Mapに支店コードと支店名を保持
 				branchNames.put(item[0], item[1]);
 				//Mapに支店コードと売り上げを保持
