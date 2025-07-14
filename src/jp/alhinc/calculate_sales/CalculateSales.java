@@ -78,7 +78,6 @@ public class CalculateSales {
 			}
 		}
 
-
 			//rcdFilesに複数の売り上げファイル情報を格納してるため、その数だけ繰り返す
 		for(int i = 0; i < rcdFiles.size(); i++) {
 			BufferedReader br = null;
@@ -89,10 +88,9 @@ public class CalculateSales {
 				br = new BufferedReader(fr);
 
 				String  line;
+
 				//リストの宣言
 				List<String> fileData = new ArrayList<String>();
-
-
 
 				//while文｛リストにadd｝
 				while((line = br.readLine()) != null) {
@@ -121,7 +119,6 @@ public class CalculateSales {
 
 				//読み込んだ売り上げ金額を加算
 				long saleAmount = branchSales.get(fileData.get(0)) + fileSale ;
-
 
 				//売上金額が11桁を超えた場合、エラーメッセージを表示する
 				if(saleAmount >= 10000000000L) {
@@ -153,7 +150,6 @@ public class CalculateSales {
 		if(!writeFile(args[0], FILE_NAME_BRANCH_OUT, branchNames, branchSales)) {
 			return;
 		}
-
 	}
 
 	/**
